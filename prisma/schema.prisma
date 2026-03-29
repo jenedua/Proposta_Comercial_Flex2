@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProductType {
+  product
+  service
+}
+
+enum ProposalStatus {
+  draft
+  sent
+  approved
+  rejected
+}
+
+model Account {
+  id          Int              @id @default(autoincrement())
+  companyName String           @map("company_name")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  customers   Customer[]
+  products    ProductService[]
+  proposals   Proposal[]
+  settings    Settings?
+  users       User[]
+
+  @@map("accounts")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  accountId    Int      @map("account_id")
+  name         String
+  email        String   @unique
+  whatsapp     String?
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  account      Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@map("users")
+}
+
+model Customer {
+  id        Int        @id @default(autoincrement())
+  accountId Int        @map("account_id")
+  name      String
+  email     String?
+  phone     String?
+  createdAt DateTime   @default(now()) @map("created_at")
+  account   Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  proposals Proposal[]
+
+  @@index([accountId])
+  @@map("customers")
+}
+
+model ProductService {
+  id            Int            @id @default(autoincrement())
+  accountId     Int            @map("account_id")
+  type          ProductType
+  description   String
+  price         Float          @default(0)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  account       Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  proposalItems ProposalItem[]
+
+  @@index([accountId])
+  @@map("products_services")
+}
+
+model Proposal {
+  id               Int            @id @default(autoincrement())
+  accountId        Int            @map("account_id")
+  customerId       Int            @map("customer_id")
+  sequentialNumber Int            @map("sequential_number")
+  title            String
+  totalValue       Float          @default(0) @map("total_value")
+  status           ProposalStatus @default(draft)
+  proposalDate     DateTime       @db.Date @map("proposal_date")
+  followupDate     DateTime?      @db.Date @map("followup_date")
+  notes            String?
+  publicLinkUuid   String         @unique @map("public_link_uuid")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  account          Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  customer         Customer       @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items            ProposalItem[]
+
+  @@unique([accountId, sequentialNumber])
+  @@index([accountId])
+  @@index([customerId])
+  @@map("proposals")
+}
+
+model ProposalItem {
+  id               Int             @id @default(autoincrement())
+  proposalId       Int             @map("proposal_id")
+  productServiceId Int?            @map("product_service_id")
+  description      String
+  quantity         Float           @default(1)
+  unitPrice        Float           @default(0) @map("unit_price")
+  totalPrice       Float           @default(0) @map("total_price")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  proposal         Proposal        @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  productService   ProductService? @relation(fields: [productServiceId], references: [id], onDelete: SetNull)
+
+  @@index([proposalId])
+  @@index([productServiceId])
+  @@map("proposal_items")
+}
+
+model Settings {
+  id                  Int      @id @default(autoincrement())
+  accountId           Int      @unique @map("account_id")
+  whatsappDefaultText String   @map("whatsapp_default_text")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  account             Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@map("settings")
+}

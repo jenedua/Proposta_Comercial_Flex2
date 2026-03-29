@@ -1,0 +1,81 @@
+{
+  "name": "page_login",
+  "url": "/login",
+  "status": 200,
+  "body": "<!doctype html>\r\n<html lang=\"en\">\r\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;</script>\n\n    <script type=\"module\" src=\"/@vite/client\"></script>\n\r\n    <meta charset=\"UTF-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n    <title>My Google AI Studio App</title>\r\n  </head>\r\n  <body>\r\n    <div id=\"root\"></div>\r\n    <script type=\"module\" src=\"/src/main.tsx\"></script>\r\n  </body>\r\n</html>\r\n\r\n"
+}
+{
+  "name": "auth_register",
+  "url": "/api/auth/register",
+  "status": 200,
+  "body": {
+    "success": true
+  }
+}
+{
+  "name": "auth_login",
+  "url": "/api/auth/login",
+  "status": 200,
+  "body": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImFjY291bnRJZCI6MiwibmFtZSI6IkFkbWluIFRlc3RlIiwiaWF0IjoxNzc0ODA1NTI0LCJleHAiOjE3NzU0MTAzMjR9.m0s1sUkMq4-HabG1-IaYU86Q_b7naEGGpbAGVMjM95g",
+    "user": {
+      "name": "Admin Teste",
+      "email": "localhost-check-1774805524004@example.com"
+    }
+  }
+}
+{
+  "name": "dashboard_stats",
+  "url": "/api/dashboard/stats",
+  "status": 500,
+  "body": {
+    "error": "no such column: \"approved\" - should this be a string literal in single-quotes?"
+  }
+}
+{
+  "name": "customers_list",
+  "url": "/api/customers",
+  "status": 200,
+  "body": []
+}
+{
+  "name": "customers_create",
+  "url": "/api/customers",
+  "status": 200,
+  "body": {
+    "id": 2,
+    "name": "Cliente Teste",
+    "email": "cliente@example.com",
+    "phone": "11988888888"
+  }
+}
+{
+  "name": "products_list",
+  "url": "/api/products",
+  "status": 500,
+  "body": {
+    "error": "no such table: products_services"
+  }
+}
+{
+  "name": "settings_get",
+  "url": "/api/settings",
+  "status": 500,
+  "body": {
+    "error": "no such table: settings"
+  }
+}
+{
+  "name": "proposals_list",
+  "url": "/api/proposals",
+  "status": 200,
+  "body": []
+}
+{
+  "name": "proposals_create",
+  "url": "/api/proposals",
+  "status": 500,
+  "body": {
+    "error": "no such table: proposal_items"
+  }
+}

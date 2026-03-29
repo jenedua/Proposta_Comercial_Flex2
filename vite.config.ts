@@ -3,8 +3,16 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 
+function resolvePort(value: string | undefined, fallback: number) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  const hmrDisabled = env.DISABLE_HMR === 'true';
+  const hmrPort = resolvePort(env.VITE_HMR_PORT ?? env.HMR_PORT, 24678);
+
   return {
     plugins: [react(), tailwindcss()],
     define: {
@@ -16,9 +24,13 @@ export default defineConfig(({mode}) => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
+      hmr: hmrDisabled
+        ? false
+        : {
+            host: env.VITE_HMR_HOST || 'localhost',
+            port: hmrPort,
+            clientPort: hmrPort,
+          },
     },
   };
 });
