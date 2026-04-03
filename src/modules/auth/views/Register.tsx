@@ -1,4 +1,3 @@
-import React from 'react';
 import {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {
@@ -12,14 +11,17 @@ import {
   UserRound,
 } from 'lucide-react';
 import AuthBrand from '../components/AuthBrand';
+import AuthShowcase from '../components/AuthShowcase';
 import {Button} from '../../../shared/components/ui/Button';
 import {Input} from '../../../shared/components/ui/Input';
 import {getRequestErrorMessage, readApiError} from '../../../shared/lib/api';
 
-const steps = [
-  {id: 1, label: 'Conta'},
-  {id: 2, label: 'Empresa'},
-  {id: 3, label: 'Seguranca'},
+const showcaseChips = ['Conta', 'Empresa', 'Propostas'];
+
+const showcaseMetrics = [
+  {value: '01', label: 'Conta'},
+  {value: '02', label: 'Equipe'},
+  {value: '03', label: 'Pronto'},
 ];
 
 export default function Register() {
@@ -32,7 +34,6 @@ export default function Register() {
     password: '',
     confirm_password: '',
   });
-  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -83,188 +84,165 @@ export default function Register() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#151b29] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#ece8df] text-[#161616]">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(112,174,255,0.1),transparent_22%),linear-gradient(180deg,#151b29_0%,#141927_50%,#182033_100%)]" />
-        <div className="absolute bottom-[-16%] left-1/2 h-[460px] w-[860px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(95,135,255,0.2),transparent_62%)] blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent_0%,rgba(94,121,192,0.14)_100%)]" />
+        <div className="absolute left-[-12%] top-[-10%] h-72 w-72 rounded-full bg-white/60 blur-3xl" />
+        <div className="absolute bottom-[-14%] right-[-8%] h-96 w-96 rounded-full bg-[#d5c4b0]/35 blur-3xl" />
+        <div className="absolute inset-y-0 left-[6%] hidden w-px bg-black/5 lg:block" />
+        <div className="absolute inset-y-0 right-[6%] hidden w-px bg-black/5 lg:block" />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-4 py-10 sm:px-6">
-        <Link
-          to="/login"
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#77b4ff]/30 bg-[linear-gradient(90deg,rgba(83,145,255,0.85),rgba(108,205,255,0.7))] px-4 py-2 text-xs font-semibold tracking-[0.12em] text-white/95 shadow-[0_12px_30px_rgba(58,120,255,0.22)] transition-transform hover:-translate-y-0.5"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Voltar para login
-        </Link>
-
-        <div className="w-full max-w-2xl overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(17,22,35,0.92),rgba(19,25,40,0.88))] shadow-[0_28px_100px_rgba(0,0,0,0.38)] backdrop-blur">
-          <div className="border-b border-white/6 px-6 py-7 sm:px-10">
-            <AuthBrand tone="dark" caption="Workspace comercial premium" centered className="mb-7" />
-
-            <div className="mb-8 flex items-center justify-center gap-3">
-              {steps.map((step, index) => (
-                <React.Fragment key={step.id}>
-                  <div className="flex flex-col items-center gap-2">
-                    <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${
-                        step.id === 1
-                          ? 'bg-[linear-gradient(180deg,#7ab8ff_0%,#5d8eff_100%)] text-white shadow-[0_8px_20px_rgba(90,142,255,0.35)]'
-                          : 'bg-white/8 text-white/75'
-                      }`}
-                    >
-                      {step.id}
-                    </div>
-                    <span className="hidden text-[10px] uppercase tracking-[0.18em] text-white/35 sm:block">{step.label}</span>
-                  </div>
-                  {index < steps.length - 1 && <div className="mb-6 h-px w-10 bg-white/18 sm:w-14" />}
-                </React.Fragment>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.28em] text-[#8cbdfc]">Criacao de conta</p>
-              <h1 className="text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl">
-                Vamos configurar seu acesso
-              </h1>
-              <p className="mt-3 text-sm leading-6 text-white/58 sm:text-base">
-                Preencha os dados da sua empresa e entre no mesmo ecossistema visual da sua area comercial.
-              </p>
-            </div>
-          </div>
-
-          <form className="space-y-5 px-6 py-7 sm:px-10 sm:py-8" onSubmit={handleRegister}>
-            {error && (
-              <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-                {error}
-              </div>
-            )}
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-white/72">Seu nome</label>
-                <div className="relative">
-                  <UserRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                  <Input
-                    required
-                    placeholder="Joao Silva"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-white/72">Empresa</label>
-                <div className="relative">
-                  <Building2 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                  <Input
-                    required
-                    placeholder="Sua empresa"
-                    value={formData.company_name}
-                    onChange={(e) => setFormData({...formData, company_name: e.target.value})}
-                    className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/72">Email</label>
-              <div className="relative">
-                <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                <Input
-                  type="email"
-                  required
-                  placeholder="voce@empresa.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/72">WhatsApp</label>
-              <div className="relative">
-                <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                <Input
-                  required
-                  placeholder="(11) 99999-9999"
-                  value={formData.whatsapp}
-                  onChange={handlePhoneChange}
-                  className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-white/72">Senha</label>
-                <div className="relative">
-                  <LockKeyhole className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                  <Input
-                    type="password"
-                    required
-                    placeholder="Min. 6 caracteres"
-                    value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-white/72">Confirmar senha</label>
-                <div className="relative">
-                  <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                  <Input
-                    type="password"
-                    required
-                    placeholder="Repita a senha"
-                    value={formData.confirm_password}
-                    onChange={(e) => setFormData({...formData, confirm_password: e.target.value})}
-                    className="h-14 rounded-2xl border-white/10 bg-white/7 pl-11 pr-4 text-[15px] text-white placeholder:text-white/28 focus:border-[#79a8ff] focus:ring-[#79a8ff]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3 text-sm text-white/62">
-              <input
-                type="checkbox"
-                checked={marketingOptIn}
-                onChange={(e) => setMarketingOptIn(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-white/20 bg-transparent accent-[#6da8ff]"
-              />
-              <span>
-                Quero receber novidades, dicas e melhorias do Proposta Flex por email.
-              </span>
-            </label>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="h-14 w-full rounded-2xl border-0 bg-[linear-gradient(90deg,#6a5cff_0%,#5d89ff_52%,#67d0ff_100%)] text-sm font-semibold tracking-[0.02em] text-white shadow-[0_18px_40px_rgba(84,112,255,0.28)] hover:opacity-95"
+      <div className="relative mx-auto flex min-h-screen max-w-7xl items-center px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="grid w-full overflow-hidden rounded-[32px] border border-black/8 bg-[#f7f3ec]/95 shadow-[0_30px_120px_rgba(12,12,12,0.12)] backdrop-blur lg:grid-cols-[0.95fr_1.05fr]">
+          <section className="relative flex flex-col justify-center px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
+            <Link
+              to="/login"
+              className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-black/10 bg-white/60 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-black/60 transition-colors hover:bg-white"
             >
-              <span>{loading ? 'Criando conta...' : 'Criar conta e enviar verificacao'}</span>
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar
+            </Link>
 
-            <div className="flex flex-col items-center gap-3 pt-1 text-center">
-              <p className="text-sm text-white/58">
-                Ja possui acesso?{' '}
-                <Link to="/login" className="font-semibold text-[#8ac1ff] transition-colors hover:text-white">
-                  Entrar agora
-                </Link>
-              </p>
-              <p className="text-xs uppercase tracking-[0.22em] text-white/28">
-                Cadastro pronto para desktop e mobile
+            <AuthBrand caption="Criar acesso" className="mb-8" />
+
+            <div className="max-w-lg">
+              <h1 className="text-4xl font-semibold tracking-[-0.05em] text-[#111111] sm:text-[4rem] sm:leading-[0.94]">
+                Criar conta
+              </h1>
+              <p className="mt-4 max-w-md text-sm leading-6 text-black/58 sm:text-base">
+                Configure sua empresa e comece a enviar propostas.
               </p>
             </div>
-          </form>
+
+            <form className="mt-7 max-w-lg space-y-4" onSubmit={handleRegister}>
+              {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 text-sm text-red-700 shadow-sm">
+                  {error}
+                </div>
+              )}
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">Seu nome</label>
+                  <div className="relative">
+                    <UserRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      required
+                      placeholder="Joao Silva"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">Empresa</label>
+                  <div className="relative">
+                    <Building2 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      required
+                      placeholder="Sua empresa"
+                      value={formData.company_name}
+                      onChange={(e) => setFormData({...formData, company_name: e.target.value})}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">Email</label>
+                  <div className="relative">
+                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      type="email"
+                      required
+                      placeholder="voce@empresa.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">WhatsApp</label>
+                  <div className="relative">
+                    <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      required
+                      placeholder="(11) 99999-9999"
+                      value={formData.whatsapp}
+                      onChange={handlePhoneChange}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">Senha</label>
+                  <div className="relative">
+                    <LockKeyhole className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      type="password"
+                      required
+                      placeholder="Min. 6 caracteres"
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-black/70">Confirmar senha</label>
+                  <div className="relative">
+                    <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35" />
+                    <Input
+                      type="password"
+                      required
+                      placeholder="Repita a senha"
+                      value={formData.confirm_password}
+                      onChange={(e) => setFormData({...formData, confirm_password: e.target.value})}
+                      className="h-12 rounded-xl border-[#e7dfd2] bg-white/80 pl-11 pr-4 text-[15px] shadow-[0_12px_30px_rgba(17,17,17,0.05)] placeholder:text-[#9b9389] focus:border-[#b6a28d] focus:ring-[#b6a28d]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="group h-12 w-full rounded-xl bg-[linear-gradient(135deg,#121212_0%,#1f2430_100%)] text-base font-semibold text-white shadow-[0_20px_35px_rgba(17,17,17,0.28)] hover:opacity-95"
+              >
+                <span>{loading ? 'Criando conta...' : 'Criar conta'}</span>
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+
+              <div className="border-t border-black/8 pt-5 text-sm text-black/58">
+                <p>
+                  Ja possui acesso?{' '}
+                  <Link
+                    to="/login"
+                    className="font-semibold text-[#111111] transition-colors hover:text-[#5f5247]"
+                  >
+                    Entrar
+                  </Link>
+                </p>
+              </div>
+            </form>
+          </section>
+
+          <AuthShowcase
+            title="Crie seu acesso e comece a operar."
+            description="Um cadastro mais rapido para colocar seu workspace comercial em movimento."
+            chips={showcaseChips}
+            metrics={showcaseMetrics}
+          />
         </div>
       </div>
     </div>

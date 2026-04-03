@@ -9,14 +9,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', ...props }, ref) => {
     const variants = {
-      primary: "bg-blue-600 text-white hover:bg-blue-700 shadow-sm",
-      secondary: "bg-green-600 text-white hover:bg-green-700 shadow-sm",
-      outline: "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50",
-      ghost: "hover:bg-gray-100 text-gray-700"
+      primary:
+        "border border-black/5 bg-[linear-gradient(135deg,#151515_0%,#262933_100%)] text-white shadow-[0_14px_30px_rgba(17,17,17,0.16)] hover:opacity-95",
+      secondary:
+        "border border-[#10913d]/10 bg-[#149940] text-white shadow-[0_12px_24px_rgba(20,153,64,0.18)] hover:bg-[#108337]",
+      outline:
+        "border border-black/10 bg-white/75 text-black/68 hover:bg-white",
+      ghost:
+        "bg-transparent text-black/58 hover:bg-black/[0.04] hover:text-black",
     };
     
     const sizes = {
-      sm: "h-8 px-3 text-xs",
+      sm: "h-9 px-3.5 text-xs",
       md: "h-10 px-4 py-2 text-sm",
       lg: "h-12 px-8 text-base"
     };
@@ -25,7 +29,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex items-center justify-center rounded-xl font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/15 disabled:pointer-events-none disabled:opacity-50",
           variants[variant],
           sizes[size],
           className
