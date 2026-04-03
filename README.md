@@ -45,6 +45,19 @@ This project now uses PostgreSQL with Prisma ORM. The frontend and API still run
 - Set `JWT_SECRET` in production to a strong value.
 - The local Docker database defaults to port `5433` so it does not collide with an existing PostgreSQL running on `5432`.
 
+## Vercel readiness
+
+- `server.ts` remains the local development entrypoint for `npm run dev`.
+- `api/[...route].ts` exposes the same Express API for Vercel Functions without changing your localhost flow.
+- `vercel.json` keeps Vite as the frontend build target and rewrites SPA routes like `/dashboard` and `/p/:uuid` to `index.html`.
+- `npm run vercel-build` runs `prisma generate`, `prisma migrate deploy`, and `vite build` for Vercel deployments.
+
+### Environment variables for Vercel
+
+- `DATABASE_URL`: pooled Neon connection string for the running app
+- `MIGRATIONS_DATABASE_URL`: direct Neon connection string for Prisma migrations
+- `JWT_SECRET`: strong production secret for authentication tokens
+
 ## Port conflicts
 
 If `npm run dev` fails with `EADDRINUSE`:
