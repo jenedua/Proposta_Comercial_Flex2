@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import type {Request, Response} from 'express';
-import {createApp} from '../server/app';
+import {createApp} from '../server/app.js';
 
 const app = createApp();
 

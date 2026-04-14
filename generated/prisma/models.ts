@@ -8,11 +8,11 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Account.ts'
-export type * from './models/User.ts'
-export type * from './models/Customer.ts'
-export type * from './models/ProductService.ts'
-export type * from './models/Proposal.ts'
-export type * from './models/ProposalItem.ts'
-export type * from './models/Settings.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/Account.js'
+export type * from './models/User.js'
+export type * from './models/Customer.js'
+export type * from './models/ProductService.js'
+export type * from './models/Proposal.js'
+export type * from './models/ProposalItem.js'
+export type * from './models/Settings.js'
+export type * from './commonInputTypes.js'

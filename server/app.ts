@@ -2,8 +2,8 @@ import express, {type NextFunction, type Request, type Response} from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import {ProductType, ProposalStatus} from '../generated/prisma/client';
-import db from './db';
+import {ProductType, ProposalStatus} from '../generated/prisma/client.js';
+import db from './db.js';
 
 const DEFAULT_WHATSAPP_TEXT =
   'Ola #CLIENTE#, segue o link da proposta #PROPOSTA# no valor de #VALOR#: #LINK#';
