@@ -48,8 +48,8 @@ This project now uses PostgreSQL with Prisma ORM. The frontend and API still run
 ## Vercel readiness
 
 - `server.ts` remains the local development entrypoint for `npm run dev`.
-- `api/[...route].ts` exposes the same Express API for Vercel Functions without changing your localhost flow.
-- `vercel.json` keeps Vite as the frontend build target and rewrites SPA routes like `/dashboard` and `/p/:uuid` to `index.html`.
+- `api/index.ts` exposes the same Express API for Vercel Functions without changing your localhost flow.
+- `vercel.json` keeps Vite as the frontend build target, rewrites `/api/*` into the single Vercel Function entrypoint, and rewrites SPA routes like `/dashboard` and `/p/:uuid` to `index.html`.
 - `npm run vercel-build` runs `prisma generate`, `prisma migrate deploy`, and `vite build` for Vercel deployments.
 
 ### Environment variables for Vercel
